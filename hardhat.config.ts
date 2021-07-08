@@ -1,5 +1,5 @@
-import * as dotenv from "dotenv";
-dotenv.config({ path: __dirname + '/.env' });
+import { config as dotEnvConfig } from "dotenv";
+dotEnvConfig();
 import "@nomiclabs/hardhat-etherscan";
 import { task } from "hardhat/config";
 import "@nomiclabs/hardhat-waffle";
