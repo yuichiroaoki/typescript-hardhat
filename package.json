@@ -6,13 +6,10 @@
   "author": "yuichiroaoki <yuichiroaoki27@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "build": "yarn clean && yarn compile",
+    "clean": "npx hardhat clean",
     "compile": "npx hardhat compile",
     "deploy": "npx hardhat run scripts/deploy.ts",
-    "deploy-kovan": "npx hardhat run --network kovan scripts/deployKovan.ts",
-    "deploy-rinkeby": "npx hardhat run --network rinkeby scripts/deployRinkeby.ts",
-    "checkPrice": "npx hardhat run --network kovan scripts/checkPrice.ts",
-    "sendEther": "npx hardhat run --network kovan scripts/sendEther.ts",
-    "mainPrice": "npx hardhat run --network hardhat scripts/mainPrice.ts",
     "test": "npx hardhat test",
     "account": "npx hardhat accounts"
   },

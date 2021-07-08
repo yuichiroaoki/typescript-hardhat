@@ -15,11 +15,6 @@ async function main() {
     // manually to make sure everything is compiled
     await run('compile');
 
-    const provider = await ethers.provider;
-    const signer = provider.getSigner()
-    // console.log({
-    //     signer, provider
-    // })
 
     // We get the contract to deploy
     const Greeter = await ethers.getContractFactory("Greeter");
