@@ -4,7 +4,7 @@ import "@nomiclabs/hardhat-etherscan";
 import { task } from "hardhat/config";
 import "@nomiclabs/hardhat-waffle";
 import "@nomiclabs/hardhat-ethers";
-import "hardhat-typechain";
+import '@typechain/hardhat'
 
 task("accounts", "Prints the list of accounts", async (args, hre) => {
   const accounts = await hre.ethers.getSigners();
@@ -25,5 +25,9 @@ module.exports = {
   solidity: "0.8.4",
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY
-  }
+  },
+  typechain: {
+    outDir: "src/types",
+    target: "ethers-v5",
+  },
 };
