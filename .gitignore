@@ -106,3 +106,6 @@ dist
 #Hardhat files
 cache
 artifacts
+
+# typechain
+src/types/
