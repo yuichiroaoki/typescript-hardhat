@@ -108,4 +108,4 @@ cache
 artifacts
 
 # typechain
-src/types/
+typechain/
