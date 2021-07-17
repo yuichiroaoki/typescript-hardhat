@@ -14,7 +14,7 @@ Clears the cache and deletes all artifacts
 ### `yarn compile`
 Compiles the entire project, building all artifacts
 
-### `yarn node`
+### `npx hardhat node`
 Starts a JSON-RPC server on top of Hardhat Network
 
 ### `yarn test`
