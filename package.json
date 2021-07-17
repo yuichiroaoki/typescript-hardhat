@@ -9,6 +9,7 @@
     "build": "yarn clean && yarn compile",
     "clean": "npx hardhat clean",
     "compile": "npx hardhat compile",
+    "node": "npx hardhat node",
     "accounts": "npx hardhat accounts",
     "balance": "npx hardhat balance --account",
     "block-number": "npx hardhat block-number",
