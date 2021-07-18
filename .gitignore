@@ -109,3 +109,5 @@ artifacts
 
 # typechain
 typechain/
+
+coverage*

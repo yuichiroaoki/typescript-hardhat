@@ -20,6 +20,9 @@ Starts a JSON-RPC server on top of Hardhat Network
 ### `yarn test`
 Runs mocha tests
 
+### `yarn coverage`
+Implement a code coverage for tests
+
 ### `yarn account`
 Show the list of accounts
 
