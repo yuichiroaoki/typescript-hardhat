@@ -1,0 +1,44 @@
+name: Static Analysis
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'contracts/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'contracts/**'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9]
+        node-version: [14.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: yarn install
+      - run: yarn compile
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          sudo snap install solc
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          solc-select install 0.8.0
+          solc-select use 0.8.0
+      - name: Test with slither
+        run: |
+          echo "Running slither"
+          slither . --print human-summary
