@@ -2,8 +2,14 @@ name: Test
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'contracts/**'
+      - 'test/**'
   pull_request:
     branches: [ main ]
+    paths:
+      - 'contracts/**'
+      - 'test/**'
 
 jobs:
   build:
