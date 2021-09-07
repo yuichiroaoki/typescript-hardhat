@@ -1,2 +1,0 @@
-slither-analyzer==0.8.1
-solc-select==0.2.1
