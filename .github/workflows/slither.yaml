@@ -43,8 +43,7 @@ jobs:
         run: |
           echo "Running slither"
           slither . --print human-summary
-      - name: Details of static ananlysis
+      - name: Contract summary of static ananlysis
         run: |
           echo "Running slither"
-          slither . 
-          echo "Finished"
+          slither . --print contract-summary
