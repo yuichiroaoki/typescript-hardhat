@@ -47,3 +47,4 @@ jobs:
         run: |
           echo "Running slither"
           slither . 
+          echo "Finished"
