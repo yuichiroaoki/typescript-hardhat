@@ -32,6 +32,7 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
+
       - name: Install dependencies
         run: |
           sudo snap install solc
@@ -39,11 +40,23 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           solc-select install 0.8.0
           solc-select use 0.8.0
+
       - name: Summary of static ananlysis
         run: |
-          echo "Running slither"
           slither . --print human-summary
+
       - name: Contract summary of static ananlysis
         run: |
-          echo "Running slither"
           slither . --print contract-summary
+
+      - name: Function summary
+        run: |
+          slither . --print function-summary
+
+      - name: Inheritance
+        run: |
+          slither . --print inheritance
+
+      - name: Data dependency
+        run: |
+          slither . --print data-dependency
