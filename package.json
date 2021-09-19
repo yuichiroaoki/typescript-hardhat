@@ -42,8 +42,5 @@
     "typechain": "^5.1.1",
     "typescript": "^4.3.2"
   },
-  "dependencies": {},
-  "lint-staged": {
-    "*.{js,css,md}": "prettier --write"
-  }
+  "dependencies": {}
 }
