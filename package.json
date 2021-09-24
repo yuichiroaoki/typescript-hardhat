@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/yuichiroaoki/solidity-examples.git",
-  "author": "yuichiroaoki <yuichiroaoki27@gmail.com>",
+  "author": "yuichiroaoki",
   "license": "MIT",
   "scripts": {
     "build": "yarn clean && yarn compile",
