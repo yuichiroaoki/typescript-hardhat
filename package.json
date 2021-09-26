@@ -1,8 +1,8 @@
 {
-  "name": "solidity-examples",
+  "name": "typescript-hardhat",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "https://github.com/yuichiroaoki/solidity-examples.git",
+  "repository": "https://github.com/yuichiroaoki/typescript-hardhat",
   "author": "yuichiroaoki",
   "license": "MIT",
   "scripts": {
