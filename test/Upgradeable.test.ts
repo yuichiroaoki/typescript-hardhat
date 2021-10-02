@@ -61,7 +61,30 @@ describe("Upgradeable", () => {
     ).to.be.reverted;
   });
 
-  it("Should upgrade the contract", async () => {
+  it("Should return the new storedValue once it's changed", async function () {
+    expect(await Upgradeable.getStoredValue()).to.equal(0);
+    await Upgradeable.setStoredValue(1000);
+    expect(await Upgradeable.getStoredValue()).to.equal(1000);
+  });
+
+  it("Should execute a new function once the contract is upgraded", async () => {
+    const upgradeableV2Factory = await ethers.getContractFactory(
+      "BaseUpgradeableV2",
+      owner
+    );
+    await upgradeableV2Factory.deploy();
+
+    await upgrades.upgradeProxy(Upgradeable.address, upgradeableV2Factory);
+    UpgradeableV2 = upgradeableV2Factory.attach(
+      Upgradeable.address
+    ) as BaseUpgradeableV2;
+    expect(await UpgradeableV2.greet()).to.eq("Hello World");
+  });
+
+  it("Should get the same stored values after the contract is upgraded", async () => {
+    const initialStoredValue = 1000;
+    await Upgradeable.setStoredValue(initialStoredValue);
+    expect(await Upgradeable.getStoredValue()).to.equal(initialStoredValue);
     const upgradeableV2Factory = await ethers.getContractFactory(
       "BaseUpgradeableV2",
       owner
@@ -73,7 +96,6 @@ describe("Upgradeable", () => {
       Upgradeable.address
     ) as BaseUpgradeableV2;
     expect(await Upgradeable.owner()).to.equal(owner.address);
-
-    expect(await UpgradeableV2.greet()).to.eq("Hello World");
+    expect(await UpgradeableV2.getStoredValue()).to.equal(initialStoredValue);
   });
 });
