@@ -2,14 +2,14 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
 import { ethers, upgrades } from "hardhat";
 import {
-  ReentrancyUpgradeable__factory,
-  ReentrancyUpgradeable,
-  ReentrancyUpgradeableV2,
+  BaseUpgradeable__factory,
+  BaseUpgradeable,
+  BaseUpgradeableV2,
 } from "../typechain";
 
 describe("Upgradeable", () => {
-  let Upgradeable: ReentrancyUpgradeable;
-  let UpgradeableV2: ReentrancyUpgradeableV2;
+  let Upgradeable: BaseUpgradeable;
+  let UpgradeableV2: BaseUpgradeableV2;
   let owner: SignerWithAddress;
   let addr1: SignerWithAddress;
   let addr2: SignerWithAddress;
@@ -20,13 +20,13 @@ describe("Upgradeable", () => {
   beforeEach(async () => {
     [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
 
-    const ReentrancyFactory = (await ethers.getContractFactory(
-      "ReentrancyUpgradeable",
+    const BaseFactory = (await ethers.getContractFactory(
+      "BaseUpgradeable",
       owner
-    )) as ReentrancyUpgradeable__factory;
-    Upgradeable = (await upgrades.deployProxy(ReentrancyFactory, [], {
+    )) as BaseUpgradeable__factory;
+    Upgradeable = (await upgrades.deployProxy(BaseFactory, [], {
       initializer: "initialize",
-    })) as ReentrancyUpgradeable;
+    })) as BaseUpgradeable;
     await Upgradeable.deployed();
   });
 
@@ -63,7 +63,7 @@ describe("Upgradeable", () => {
 
   it("Should upgrade the contract", async () => {
     const upgradeableV2Factory = await ethers.getContractFactory(
-      "ReentrancyUpgradeableV2",
+      "BaseUpgradeableV2",
       owner
     );
     await upgradeableV2Factory.deploy();
@@ -71,7 +71,7 @@ describe("Upgradeable", () => {
     await upgrades.upgradeProxy(Upgradeable.address, upgradeableV2Factory);
     UpgradeableV2 = upgradeableV2Factory.attach(
       Upgradeable.address
-    ) as ReentrancyUpgradeableV2;
+    ) as BaseUpgradeableV2;
     expect(await Upgradeable.owner()).to.equal(owner.address);
 
     expect(await UpgradeableV2.greet()).to.eq("Hello World");

@@ -1,10 +1,10 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Reentrancy__factory, Reentrancy } from "../typechain";
+import { Base__factory, Base } from "../typechain";
 
-describe("Reentrancy", () => {
-  let Reentrancy: Reentrancy;
+describe("Base", () => {
+  let Base: Base;
   let owner: SignerWithAddress;
   let addr1: SignerWithAddress;
   let addr2: SignerWithAddress;
@@ -15,39 +15,39 @@ describe("Reentrancy", () => {
   beforeEach(async () => {
     [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
 
-    const ReentrancyFactory = (await ethers.getContractFactory(
-      "Reentrancy",
+    const BaseFactory = (await ethers.getContractFactory(
+      "Base",
       owner
-    )) as Reentrancy__factory;
-    Reentrancy = await ReentrancyFactory.deploy();
-    await Reentrancy.deployed();
+    )) as Base__factory;
+    Base = await BaseFactory.deploy();
+    await Base.deployed();
   });
 
   it("Should increase the balance of the contract", async () => {
-    expect(await provider.getBalance(Reentrancy.address)).to.equal(
+    expect(await provider.getBalance(Base.address)).to.equal(
       ethers.BigNumber.from(0)
     );
 
     const transactionHash = await owner.sendTransaction({
-      to: Reentrancy.address,
+      to: Base.address,
       value: ethers.utils.parseEther("1.0"),
     });
 
-    expect(await provider.getBalance(Reentrancy.address)).to.equal(
+    expect(await provider.getBalance(Base.address)).to.equal(
       ethers.utils.parseEther("1.0")
     );
   });
 
   it("Should be reverted because it is not called by the owner", async () => {
-    expect(await Reentrancy.owner()).to.equal(owner.address);
+    expect(await Base.owner()).to.equal(owner.address);
 
     const transactionHash = await owner.sendTransaction({
-      to: Reentrancy.address,
+      to: Base.address,
       value: ethers.utils.parseEther("1.0"), // Sends exactly 1.0 ether
     });
 
     await expect(
-      Reentrancy.connect(addr1).withdraw(
+      Base.connect(addr1).withdraw(
         owner.address,
         ethers.utils.parseEther("1.0")
       )
