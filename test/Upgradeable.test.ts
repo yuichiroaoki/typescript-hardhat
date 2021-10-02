@@ -4,10 +4,12 @@ import { ethers, upgrades } from "hardhat";
 import {
   ReentrancyUpgradeable__factory,
   ReentrancyUpgradeable,
+  ReentrancyUpgradeableV2,
 } from "../typechain";
 
 describe("Upgradeable", () => {
   let Upgradeable: ReentrancyUpgradeable;
+  let UpgradeableV2: ReentrancyUpgradeableV2;
   let owner: SignerWithAddress;
   let addr1: SignerWithAddress;
   let addr2: SignerWithAddress;
@@ -57,5 +59,21 @@ describe("Upgradeable", () => {
         ethers.utils.parseEther("1.0")
       )
     ).to.be.reverted;
+  });
+
+  it("Should upgrade the contract", async () => {
+    const upgradeableV2Factory = await ethers.getContractFactory(
+      "ReentrancyUpgradeableV2",
+      owner
+    );
+    await upgradeableV2Factory.deploy();
+
+    await upgrades.upgradeProxy(Upgradeable.address, upgradeableV2Factory);
+    UpgradeableV2 = upgradeableV2Factory.attach(
+      Upgradeable.address
+    ) as ReentrancyUpgradeableV2;
+    expect(await Upgradeable.owner()).to.equal(owner.address);
+
+    expect(await UpgradeableV2.greet()).to.eq("Hello World");
   });
 });
