@@ -1,0 +1,61 @@
+import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
+import { expect } from "chai";
+import { ethers, upgrades } from "hardhat";
+import {
+  ReentrancyUpgradeable__factory,
+  ReentrancyUpgradeable,
+} from "../typechain";
+
+describe("Upgradeable", () => {
+  let Upgradeable: ReentrancyUpgradeable;
+  let owner: SignerWithAddress;
+  let addr1: SignerWithAddress;
+  let addr2: SignerWithAddress;
+  let addrs: SignerWithAddress[];
+
+  const provider = ethers.provider;
+
+  beforeEach(async () => {
+    [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
+
+    const ReentrancyFactory = (await ethers.getContractFactory(
+      "ReentrancyUpgradeable",
+      owner
+    )) as ReentrancyUpgradeable__factory;
+    Upgradeable = (await upgrades.deployProxy(ReentrancyFactory, [], {
+      initializer: "initialize",
+    })) as ReentrancyUpgradeable;
+    await Upgradeable.deployed();
+  });
+
+  it("Should increase the balance of the contract", async () => {
+    expect(await provider.getBalance(Upgradeable.address)).to.equal(
+      ethers.BigNumber.from(0)
+    );
+
+    await owner.sendTransaction({
+      to: Upgradeable.address,
+      value: ethers.utils.parseEther("1.0"),
+    });
+
+    expect(await provider.getBalance(Upgradeable.address)).to.equal(
+      ethers.utils.parseEther("1.0")
+    );
+  });
+
+  it("Should be reverted because it is not called by the owner", async () => {
+    expect(await Upgradeable.owner()).to.equal(owner.address);
+
+    await owner.sendTransaction({
+      to: Upgradeable.address,
+      value: ethers.utils.parseEther("1.0"), // Sends exactly 1.0 ether
+    });
+
+    await expect(
+      Upgradeable.connect(addr1).withdraw(
+        owner.address,
+        ethers.utils.parseEther("1.0")
+      )
+    ).to.be.reverted;
+  });
+});
