@@ -28,7 +28,7 @@ describe("Base", () => {
       ethers.BigNumber.from(0)
     );
 
-    const transactionHash = await owner.sendTransaction({
+    await owner.sendTransaction({
       to: Base.address,
       value: ethers.utils.parseEther("1.0"),
     });
@@ -41,7 +41,7 @@ describe("Base", () => {
   it("Should be reverted because it is not called by the owner", async () => {
     expect(await Base.owner()).to.equal(owner.address);
 
-    const transactionHash = await owner.sendTransaction({
+    await owner.sendTransaction({
       to: Base.address,
       value: ethers.utils.parseEther("1.0"), // Sends exactly 1.0 ether
     });
@@ -52,5 +52,11 @@ describe("Base", () => {
         ethers.utils.parseEther("1.0")
       )
     ).to.be.reverted;
+  });
+
+  it("Should return the new storedValue once it's changed", async function () {
+    expect(await Base.getStoredValue()).to.equal(0);
+    await Base.setStoredValue(1000);
+    expect(await Base.getStoredValue()).to.equal(1000);
   });
 });
