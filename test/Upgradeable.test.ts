@@ -72,7 +72,6 @@ describe("Upgradeable", () => {
       "BaseUpgradeableV2",
       owner
     );
-    await upgradeableV2Factory.deploy();
 
     await upgrades.upgradeProxy(Upgradeable.address, upgradeableV2Factory);
     UpgradeableV2 = upgradeableV2Factory.attach(
@@ -89,7 +88,6 @@ describe("Upgradeable", () => {
       "BaseUpgradeableV2",
       owner
     );
-    await upgradeableV2Factory.deploy();
 
     await upgrades.upgradeProxy(Upgradeable.address, upgradeableV2Factory);
     UpgradeableV2 = upgradeableV2Factory.attach(
