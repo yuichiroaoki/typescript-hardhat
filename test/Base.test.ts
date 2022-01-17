@@ -2,6 +2,7 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import { Base__factory, Base } from "../typechain";
+import { deployContractFromName } from "../utils";
 
 describe("Base", () => {
   let Base: Base;
@@ -15,11 +16,7 @@ describe("Base", () => {
   beforeEach(async () => {
     [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
 
-    const BaseFactory = (await ethers.getContractFactory(
-      "Base",
-      owner
-    )) as Base__factory;
-    Base = await BaseFactory.deploy();
+    Base = await deployContractFromName("Base", Base__factory);
     await Base.deployed();
   });
 
