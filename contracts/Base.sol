@@ -3,13 +3,12 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "./interfaces/IBase.sol";
 
-contract Base is ReentrancyGuard, Ownable {
+contract Base is ReentrancyGuard, Ownable, IBase {
     uint256 private storedValue;
 
-    event Received(address, uint256);
-
-    receive() external payable {
+    receive() external payable override {
         emit Received(msg.sender, msg.value);
     }
 
@@ -22,8 +21,9 @@ contract Base is ReentrancyGuard, Ownable {
     }
 
     function withdraw(address to, uint256 value)
-        public
+        external
         payable
+        override
         onlyOwner
         nonReentrant
     {
