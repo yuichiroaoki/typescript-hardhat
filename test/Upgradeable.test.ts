@@ -5,7 +5,7 @@ import {
   BaseUpgradeable__factory,
   BaseUpgradeable,
   BaseUpgradeableV2,
-} from "../typechain";
+} from "../typechain-types";
 
 describe("Upgradeable", () => {
   let Upgradeable: BaseUpgradeable;

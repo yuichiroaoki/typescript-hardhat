@@ -1,7 +1,7 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Base__factory, Base } from "../typechain";
+import { Base__factory, Base } from "../typechain-types";
 import { deployContractFromName } from "../utils";
 
 describe("Base", () => {

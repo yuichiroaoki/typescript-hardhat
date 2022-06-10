@@ -1,5 +1,5 @@
 import { network, ethers } from "hardhat";
-import { ERC20Mock } from "../typechain";
+import { ERC20Mock } from "../typechain-types";
 
 export const getErc20Balance = async (
   contract: ERC20Mock,
