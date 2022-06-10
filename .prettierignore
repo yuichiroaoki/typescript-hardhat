@@ -7,7 +7,7 @@ coverage/
 dist/
 lib/
 node_modules/
-typechain/
+typechain-types/
 
 # files
 *.env
