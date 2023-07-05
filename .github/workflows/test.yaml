@@ -2,16 +2,8 @@ name: Test
 on:
   push:
     branches: [main]
-    paths:
-      - "contracts/**"
-      - "test/**"
-      - "utils/**"
   pull_request:
     branches: [main]
-    paths:
-      - "contracts/**"
-      - "test/**"
-      - "utils/**"
   workflow_dispatch:
 
 jobs:
@@ -20,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [16.x, 18.x]
 
     steps:
       - uses: actions/checkout@v2
