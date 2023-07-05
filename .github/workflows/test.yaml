@@ -12,6 +12,7 @@ on:
       - "contracts/**"
       - "test/**"
       - "utils/**"
+  workflow_dispatch:
 
 jobs:
   build:
