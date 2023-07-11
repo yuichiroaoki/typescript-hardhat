@@ -1,4 +1,4 @@
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
+import { SignerWithAddress } from "@nomicfoundation/hardhat-ethers/signers";
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import { Base__factory, Base } from "../typechain-types";
@@ -17,37 +17,32 @@ describe("Base", () => {
     [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
 
     Base = await deployContractFromName("Base", Base__factory);
-    await Base.deployed();
+    await Base.waitForDeployment();
   });
 
   it("Should increase the balance of the contract", async () => {
-    expect(await provider.getBalance(Base.address)).to.equal(
-      ethers.BigNumber.from(0)
-    );
+    expect(await provider.getBalance(Base.getAddress())).to.equal(0);
 
     await owner.sendTransaction({
-      to: Base.address,
-      value: ethers.utils.parseEther("1.0"),
+      to: Base.getAddress(),
+      value: ethers.parseEther("1.0"),
     });
 
-    expect(await provider.getBalance(Base.address)).to.equal(
-      ethers.utils.parseEther("1.0")
+    expect(await provider.getBalance(Base.getAddress())).to.equal(
+      ethers.parseEther("1.0")
     );
   });
 
   it("Should be reverted because it is not called by the owner", async () => {
-    expect(await Base.owner()).to.equal(owner.address);
+    expect(await Base.owner()).to.equal(await owner.getAddress());
 
     await owner.sendTransaction({
-      to: Base.address,
-      value: ethers.utils.parseEther("1.0"), // Sends exactly 1.0 ether
+      to: Base.getAddress(),
+      value: ethers.parseEther("1.0"), // Sends exactly 1.0 ether
     });
 
     await expect(
-      Base.connect(addr1).withdraw(
-        owner.address,
-        ethers.utils.parseEther("1.0")
-      )
+      Base.connect(addr1).withdraw(owner.getAddress(), ethers.parseEther("1.0"))
     ).to.be.reverted;
   });
 

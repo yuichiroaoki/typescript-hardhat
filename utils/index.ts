@@ -2,7 +2,7 @@ import { ethers } from "hardhat";
 import { ERC20Mock__factory } from "../typechain-types";
 
 export const getBigNumber = (amount: number, decimals = 18) => {
-  return ethers.utils.parseUnits(amount.toString(), decimals);
+  return ethers.parseUnits(amount.toString(), decimals);
 };
 
 export async function advanceBlock() {

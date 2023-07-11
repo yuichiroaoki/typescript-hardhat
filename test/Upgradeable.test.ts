@@ -1,8 +1,9 @@
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
+import { SignerWithAddress } from "@nomicfoundation/hardhat-ethers/signers";
 import { expect } from "chai";
 import { ethers, upgrades } from "hardhat";
 import {
   BaseUpgradeable__factory,
+  BaseUpgradeableV2__factory,
   BaseUpgradeable,
   BaseUpgradeableV2,
 } from "../typechain-types";
@@ -24,39 +25,41 @@ describe("Upgradeable", () => {
       "BaseUpgradeable",
       owner
     )) as BaseUpgradeable__factory;
-    Upgradeable = (await upgrades.deployProxy(BaseFactory, [], {
-      initializer: "initialize",
-    })) as BaseUpgradeable;
-    await Upgradeable.deployed();
+    const BaseV2Factory = (await ethers.getContractFactory(
+      "BaseUpgradeableV2",
+      owner
+    )) as BaseUpgradeableV2__factory;
+    Upgradeable = (await upgrades.deployProxy(
+      BaseFactory,
+      []
+    )) as unknown as BaseUpgradeable;
   });
 
   it("Should increase the balance of the contract", async () => {
-    expect(await provider.getBalance(Upgradeable.address)).to.equal(
-      ethers.BigNumber.from(0)
-    );
+    expect(await provider.getBalance(Upgradeable.getAddress())).to.equal(0);
 
     await owner.sendTransaction({
-      to: Upgradeable.address,
-      value: ethers.utils.parseEther("1.0"),
+      to: Upgradeable.getAddress(),
+      value: ethers.parseEther("1.0"),
     });
 
-    expect(await provider.getBalance(Upgradeable.address)).to.equal(
-      ethers.utils.parseEther("1.0")
+    expect(await provider.getBalance(Upgradeable.getAddress())).to.equal(
+      ethers.parseEther("1.0")
     );
   });
 
   it("Should be reverted because it is not called by the owner", async () => {
-    expect(await Upgradeable.owner()).to.equal(owner.address);
+    expect(await Upgradeable.owner()).to.equal(await owner.getAddress());
 
     await owner.sendTransaction({
-      to: Upgradeable.address,
-      value: ethers.utils.parseEther("1.0"), // Sends exactly 1.0 ether
+      to: Upgradeable.getAddress(),
+      value: ethers.parseEther("1.0"), // Sends exactly 1.0 ether
     });
 
     await expect(
       Upgradeable.connect(addr1).withdraw(
-        owner.address,
-        ethers.utils.parseEther("1.0")
+        owner.getAddress(),
+        ethers.parseEther("1.0")
       )
     ).to.be.reverted;
   });
@@ -73,9 +76,12 @@ describe("Upgradeable", () => {
       owner
     );
 
-    await upgrades.upgradeProxy(Upgradeable.address, upgradeableV2Factory);
+    await upgrades.upgradeProxy(
+      await Upgradeable.getAddress(),
+      upgradeableV2Factory
+    );
     UpgradeableV2 = upgradeableV2Factory.attach(
-      Upgradeable.address
+      await Upgradeable.getAddress()
     ) as BaseUpgradeableV2;
     expect(await UpgradeableV2.greet()).to.eq("Hello World");
   });
@@ -89,11 +95,14 @@ describe("Upgradeable", () => {
       owner
     );
 
-    await upgrades.upgradeProxy(Upgradeable.address, upgradeableV2Factory);
+    await upgrades.upgradeProxy(
+      await Upgradeable.getAddress(),
+      upgradeableV2Factory
+    );
     UpgradeableV2 = upgradeableV2Factory.attach(
-      Upgradeable.address
+      await Upgradeable.getAddress()
     ) as BaseUpgradeableV2;
-    expect(await Upgradeable.owner()).to.equal(owner.address);
+    expect(await Upgradeable.owner()).to.equal(await owner.getAddress());
     expect(await UpgradeableV2.getStoredValue()).to.equal(initialStoredValue);
   });
 });
